@@ -1,0 +1,14 @@
+.idea
+mysql-for-seata/data/*
+mysql-for-business/data/*
+zookeeper/logs/*
+zookeeper/data/*
+redis/data/*
+seata/data/*
+seata/logs/*
+zookeeper/data/*
+.env
+docker-compose.yml
+seata/conf/registry.conf
+**/.DS_Store
+running.log

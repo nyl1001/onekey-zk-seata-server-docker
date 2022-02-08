@@ -1,0 +1,100 @@
+# 请根据docker-compose版本选择2/3
+version: "3"
+
+services:
+  redis-onekey-zk-standalone:
+    image: redis:latest
+    restart: always
+    container_name: redis-onekey-zk-standalone
+    environment:
+      - TZ=Asia/Shanghai
+    command:
+      - /bin/bash
+      - -c
+      - redis-server /usr/local/bin/redis.conf/redis.conf --requirepass "123456"
+    privileged: true
+    ports:
+      - "0.0.0.0:6380:6379"
+    volumes:
+      - ./redis/data:/data
+      - ./redis/redis.conf:/usr/local/bin/redis.conf/redis.conf
+      - /etc/localtime:/etc/localtime:ro
+
+  custom-zookeeper-onekey-zk-standalone:
+    container_name: custom-zookeeper-onekey-zk-standalone
+    build: ./zookeeper
+    #    image: zookeeper:latest
+    volumes:
+      - ./zookeeper/init.data:/init.data
+      - ./zookeeper/data:/data
+      - ./zookeeper/logs:/datalog
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      TZ: Asia/Shanghai
+      SEATA_MYSQL_PORT: ${SEATA_MYSQL_PORT}
+      HOST_IP: ${HOST_IP}
+    ports:
+      - "2181:2181"
+    restart: on-failure
+    ## use the hostname in project
+    hostname: custom-zookeeper-onekey-zk-standalone
+
+  mysql-for-seata-onekey-zk-standalone:
+    image: 'mysql/mysql-server:5.7'
+    restart: always
+    container_name: mysql-for-seata-onekey-zk-standalone
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./mysql-for-seata/data:/var/lib/mysql
+      - ./mysql-for-seata/config/my.cnf:/etc/my.cnf
+      - ./mysql-for-seata/config/init.d:/docker-entrypoint-initdb.d
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - '3308:3306'
+
+  seata-server-onekey-zk-standalone:
+    #    image: seataio/seata-server:1.4.2
+    build: ./seata
+    image: onekey_custom/seata-server:1.0
+    container_name: seata-server-onekey-zk-standalone
+    hostname: seata-server
+    restart: always
+    #    networks:
+    #      - seata-server
+    ports:
+      - "8091:8091"
+    environment:
+      #宿主机ip
+      - SEATA_PORT=8091
+      - STORE_MODE=db
+      - SEATA_IP=${HOST_IP}
+      - HOST_IP=${HOST_IP}
+      - SEATA_WAITING_TIME_FOR_CONFIG_SYNC_TO_ZK=${SEATA_WAITING_TIME_FOR_CONFIG_SYNC_TO_ZK}
+      - SEATA_CONFIG_NAME=file:/root/seata-config/registry
+      - TZ=Asia/Shanghai
+    privileged: true
+
+    volumes:
+      - ./seata/conf:/root/seata-config
+      - ./libs/mysql-connector-java-8.0.21.jar:/seata-server/libs/mysql-connector-java-8.0.21.jar
+      - ./seata/logs:/root/logs/seata
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - mysql-for-seata-onekey-zk-standalone
+      - custom-zookeeper-onekey-zk-standalone
+
+  mysql-for-business-onekey-zk-standalone:
+    image: 'mysql/mysql-server:5.7'
+    restart: always
+    container_name: mysql-for-business-onekey-zk-standalone
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./mysql-for-business/data:/var/lib/mysql
+      - ./mysql-for-business/config/my.cnf:/etc/my.cnf
+      - ./mysql-for-business/config/init.d:/docker-entrypoint-initdb.d
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - '3309:3306'

@@ -1,0 +1,69 @@
+#!/bin/bash
+
+. $ONEKEY_ZK_ENV_PATH/sh/color.sh
+
+# check env path
+if [[ "$ONEKEY_ZK_ENV_PATH" == "" ]]
+then
+  echo -e "Please set your ONEKEY_ZK_ENV_PATH for the env path <You can get the help from the README> ..."
+  exit
+fi
+
+# 获取输入命令
+command=$1
+
+case $command in
+  "build" )
+    $OUTPUT "$RED  Build the docker config $TAILS\n"
+    bash $ONEKEY_ZK_ENV_PATH/sh/docker/build.sh $2
+    exit
+  ;;
+  "start" )
+    $OUTPUT "$RED  Start the docker container $TAILS\n"
+    bash $ONEKEY_ZK_ENV_PATH/sh/docker/start.sh
+    exit
+  ;;
+  "restart" )
+    $OUTPUT "$RED  Restart the docker container $TAILS\n"
+    bash $ONEKEY_ZK_ENV_PATH/sh/docker/restart.sh
+    exit
+  ;;
+  "login" )
+    $OUTPUT "$RED  Into the docker container $TAILS\n"
+    bash $ONEKEY_ZK_ENV_PATH/sh/docker/login.sh $2
+    exit
+  ;;
+  "stop" )
+    $OUTPUT "$RED  Stop the docker container $TAILS\n"
+    bash $ONEKEY_ZK_ENV_PATH/sh/docker/stop.sh
+    exit
+  ;;
+  "destroy" )
+    $OUTPUT "$RED  Delete the docker container $TAILS\n"
+    bash $ONEKEY_ZK_ENV_PATH/sh/docker/destroy.sh
+    exit
+  ;;
+  "list" )
+    $OUTPUT "$RED  Show all the container $TAILS\n"
+    docker ps -a | grep onekey-zk
+    exit
+  ;;
+  * )
+$OUTPUT "
+  $BLUE$FLICKER Building a development environment for the onekey-zk team using docker $TAILS
+  $BLUE$FLICKER Support onekey-zk project develop $TAILS
+
+  $YELLOW ONEKEY_ZK Docker Command: $TAILS
+    $WHITE onekey-zk build <config> $TAILS  build docker config.
+    $WHITE onekey-zk list $TAILS            show container list
+    $WHITE onekey-zk start $TAILS           start container
+    $WHITE onekey-zk restart $TAILS         restart container
+    $WHITE onekey-zk stop $TAILS            stop container
+    $WHITE onekey-zk login $TAILS           into the container, option: [container name or id]
+    $WHITE onekey-zk destroy $TAILS         destroy container and delete docker image
+    $WHITE onekey-zk help $TAILS            commands list
+
+    "
+    exit
+  ;;
+esac
