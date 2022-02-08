@@ -48,19 +48,28 @@ https://docs.docker.com/compose/install/
 - 方式1：任意目录下执行 onekey-zk start 命令
 - 方式2：直接执行当前项目目录下的 one-key-start.sh 脚本
 
-### 1.4 启动状态查看
+### 1.4 启动健康状态查看
 
-检查docker list状态，发现下述8个容器状态正常则表示启动正常。
+检查docker list状态，发现下述5个容器状态正常则表示启动正常。
+<img width="1788" alt="image" src="https://user-images.githubusercontent.com/5603342/153039414-daf75c5d-a85b-414e-874b-88caec6bc52f.png">
 
-![image](https://user-images.githubusercontent.com/5603342/152224931-e021ec67-401c-45d5-a03e-caed67006ba2.png)
 
-seata在zookeeper上的注册信息
-![image](https://user-images.githubusercontent.com/5603342/152242858-158796bc-d3fe-4ad1-b2bf-dda3324d8744.png)
+seata在zookeeper上的注册信息:
+```
+cd /apache-zookeeper-3.7.0-bin/bin
+./zkCli.sh
+ls /registry/zk/default![image](https://user-images.githubusercontent.com/5603342/153039168-767fcdb6-a7ec-44ab-bf22-9c3966619eac.png)
+```
+<img width="484" alt="image" src="https://user-images.githubusercontent.com/5603342/153038895-6e76a1c8-5dce-4aca-b42f-b40e6c0aac2c.png">
 
-注意zookeeper管理后台默认账号为zookeeper，密码为zookeeper。
 
 seata在zookeeper上的配置信息
-![image](https://user-images.githubusercontent.com/5603342/152242665-e5208d92-c69a-49f5-9a37-44c65a4ae676.png)
+```
+cd /apache-zookeeper-3.7.0-bin/bin
+./zkCli.sh
+ls /seata
+```
+<img width="1736" alt="image" src="https://user-images.githubusercontent.com/5603342/153038719-7aa0a709-5537-4cf4-bf51-23a87af2bc8f.png">
 
 
 
