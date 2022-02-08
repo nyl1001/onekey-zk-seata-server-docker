@@ -2,6 +2,17 @@
 **注意:** 支持 Mac 与 Linux两种系统
 
 
+由于不少公司的项目环境是 springboot + dubbo + zookeeper，以zookeeper而非nacos作为注册中心和配置中心，本人近期针对这种应用场景整理了《一键部署springboot + dubbo + zookeeper + seata-searver整合server docker环境》的项目，链接如下：
+
+https://github.com/nyl1001/onekey-zk-seata-server-docker
+
+同时提供了示例项目《spring boot + dubbo + zookeeper + seata 整合示例》，链接如下：
+
+https://github.com/nyl1001/springboot-dubbo-seata-zk
+
+上述两个项目搭配使用比官网样例好用很多，官网样例不仅陈旧，而且没有详细部署操作文档，整个操作会相当复杂。通过一键部署docker + 专用示例项目和盘托出，所见即所得，让你直达主题和核心要害，少走弯路。
+
+
 ## 1 安装与启动
 
 ### 1.1 首次安装
