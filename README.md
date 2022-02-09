@@ -88,13 +88,14 @@ ls /seata
 
 ```
 // docker简单命令列表
-onekey-zk build       重置配置信息，文件.env、seata/conf/registry.conf、docker-compose.yml均会被重置
+onekey-zk build       重置配置信息和docker镜像，文件.env、seata/conf/registry.conf、docker-compose.yml均会被重置
 onekey-zk list        显示当前onekey-zk的容器列表
-onekey-zk start       启动容器，启动后即可正常使用该容器进行coding
-onekey-zk restart     重新启动容器；如果没有启动，会直接启动容器，此时与 onekey-zk start 效果相同
-onekey-zk stop        停止容器的运行
+onekey-zk start       重建镜像后启动容器，启动后即可正常容器
+onekey-zk restart     重新启动容器；如果没有启动，则会直接启动容器，注意此过程不会重建容器镜像
+onekey-zk stop        停止运行所有相关容器
 onekey-zk login       进入容器内部，需要指定容器名称
-onekey-zk destroy     删除容器及镜像
+onekey-zk destroy     停止并删除所有相关容器
+onekey-zk rmi         删除所有相关容器镜像，谨慎操作
 onekey-zk help        显示所有的命令列表
 
 ```
