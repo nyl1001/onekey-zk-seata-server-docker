@@ -22,7 +22,7 @@ if [ ! -f "$initProcessRecordFile" ]
 then
   initType="create"
 else
-  rm "$initProcessRecordFile"
+  : > $initProcessRecordFile
   initType="set"
 fi
 
