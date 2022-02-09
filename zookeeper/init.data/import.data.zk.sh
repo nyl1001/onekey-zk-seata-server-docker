@@ -36,10 +36,10 @@ addConfig() {
   root=$1
   dataId=$2
   content=$3
-  echo "addConfig ${root} tempLog begin:"
-  $CMD "$initType" /${root}/${dataId} $content >"${tempLog}" 2>/dev/null
+  echo "addConfig ${initType} ${root} tempLog begin:"
+  $CMD $initType /${root}/${dataId} $content >"${tempLog}" 2>/dev/null
   cat "${tempLog}"
-  echo "addConfig ${root} tempLog end:"
+  echo "addConfig ${initType} ${root} tempLog end:"
   #  if [ -z $(cat "${tempLog}") ]; then
   #    echo " Please check the cluster status. "
   #    exit 1
@@ -54,7 +54,7 @@ addConfig() {
 
 count=0
 COMMENT_START="#"
-$CMD "$initType" /config "1" >/dev/null
+$CMD $initType /config "1" >/dev/null
 for line in $(cat /init.data/seata-config.txt | sed s/[[:space:]]//g); do
   if [[ "$line" =~ ^"${COMMENT_START}".* ]]; then
     continue
@@ -70,7 +70,7 @@ for line in $(cat /init.data/seata-config.txt | sed s/[[:space:]]//g); do
   addConfig config "${key}" "${value}"
 done
 
-$CMD "$initType" /seata "1" >/dev/null
+$CMD $initType /seata "1" >/dev/null
 for lineForSeata in $(cat /init.data/zk-seata-config.properties | sed s/[[:space:]]//g); do
   echo "lineForSeata ${lineForSeata}"
   if [[ "$lineForSeata" =~ ^"${COMMENT_START}".* ]]; then

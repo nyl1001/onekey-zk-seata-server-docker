@@ -18,10 +18,11 @@ fi
 
 #
 initType="create"
-if [ ! -f "$initFile" ]
+if [ ! -f "$initProcessRecordFile" ]
 then
   initType="create"
 else
+  rm "$initProcessRecordFile"
   initType="set"
 fi
 
@@ -29,7 +30,7 @@ fi
 echo "check needInitData is: $needInitData"
 
 ## start my import data ====================
-if [ needInitData = "Y" ]
+if [ $needInitData = "Y" ]
 then
 
   ## start in backgroup by original entry point
