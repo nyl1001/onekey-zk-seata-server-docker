@@ -4,30 +4,32 @@
 
 # set -e
 
-initedfile="/data/zk.onekey-zookeeper.inited"
-initcmdfile='/init.data/import.data.zk.sh'
+initProcessRecordFile="/data/zk.onekey-zookeeper.inited"
+initCmdFile='/init.data/import.data.zk.sh'
 
-needcallinit="Y"
+needInitData="Y"
+if [ -f "$initCmdFile" ]
+then
+  needInitData="Y"
+else
+  needInitData="N"
+  echo "【onekey-zookeeper】 no init data shell file found, skip."
+fi
 
 #
-if [ ! -f "$initedfile" ]
+initType="create"
+if [ ! -f "$initFile" ]
 then
-  needcallinit="Y${needcallinit}"
+  initType="create"
 else
-  echo "【onekey-zookeeper】 data has been initialized, can not be initialized again."
+  initType="set"
 fi
 
-if [ -f "$initcmdfile" ]
-then
-  needcallinit="Y${needcallinit}"
-else
-  echo "【onekey-zookeeper】 no init data file found, skip."
-fi
 
-echo "check needcallinit is: $needcallinit"
+echo "check needInitData is: $needInitData"
 
 ## start my import data ====================
-if [ $needcallinit = "YYY" ]
+if [ needInitData = "Y" ]
 then
 
   ## start in backgroup by original entry point
@@ -37,7 +39,7 @@ then
   sleep 10
 
   echo "【onekey-zookeeper】 call init data now..."
-  date > "$initedfile"
+  date > "$initProcessRecordFile"
 
   ##import data
   echo ">>>> begin synchronizing seata config to zookeeper <<<<"
@@ -45,7 +47,7 @@ then
   echo "###########################################################"
   echo "###########################################################"
   echo "###########################################################"
-  bash $initcmdfile >> $initedfile
+  bash $initCmdFile $initType >> $initProcessRecordFile
   echo "###########################################################"
   echo "###########################################################"
   echo "###########################################################"
@@ -55,8 +57,8 @@ then
 
   ## mark
   echo "【onekey-zookeeper】 mark: init is finished!"
-  date >> "$initedfile"
-  echo "done" >> "$initedfile"
+  date >> "$initProcessRecordFile"
+  echo "done" >> "$initProcessRecordFile"
 fi
 
 ## end my import data ====================
