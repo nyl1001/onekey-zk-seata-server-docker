@@ -126,13 +126,19 @@ onekey-zk help        显示所有的命令列表
 - seata/conf/registry-default.conf:21
 - docker-compose.yml.bak
 
-## 4 部分重点细节说明
+## 4 部分实现细节说明
 1. zookeeper和seata容器镜像均进行了一定程度的自定义改造。其进行自定义的主要原因是：
     - seata采用了zookeeper和seata容器镜像均进行了一定程度的自定义改造方式进行服务注册和服务发现，并且seata的配置参数也是通过zookeeper进行配置和获取，这样在zookeeper启动之后需要立即导入seata的配置信息。
     - zookeeper的启动过程较长，而seata的启动依赖zookeeper和seata容器镜像均进行了一定程度的自定义改造，因此需要在检查确认zookeeper启动成功并且seata的配置信息全部同步到zookeeper后seata才能启动。
 
-2. seata 镜像基于seata-server 1.4.2构建。
+2. 脚本seata/init.data/import.data.zk.sh用于在zookeeper启动后往zookeeper中写入seata的配置信息。
 
-3. mysql-for-seata容器为seata提供数据持久化，mysql-for-seata容器在启动时会初始化seata所依赖的数据表结构并生成默认的seata访问账号。
+3. 脚本seata/entry-point.sh用于等待配置信息同步zookeeper完成后启动seata server。
+
+4. seata 镜像基于seata-server 1.4.2构建。
+
+5. mysql-for-seata容器为seata提供数据持久化，mysql-for-seata容器在启动时会初始化seata所依赖的数据表结构并生成默认的seata访问账号。
+
+6. mysql-for-business容器为业务测试数据库，用户可选。
 
 
