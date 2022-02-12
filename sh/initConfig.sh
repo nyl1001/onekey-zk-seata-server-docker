@@ -4,6 +4,9 @@ rootDir=$ONEKEY_ZK_ENV_PATH
 
 . ${rootDir}/sh/color.sh
 
+# 拷贝docker-compose文件
+cp $rootDir/docker-compose.yml.bak $rootDir/docker-compose.yml
+
 cp ${rootDir}/.env-default ${rootDir}/.env
 cp ${rootDir}/seata/conf/registry-default.conf ${rootDir}/seata/conf/registry.conf
 
@@ -23,5 +26,14 @@ case $sysType in
         exit -1
         ;;
 esac
+
+# 检查网络
+checkNetworkExist
+if [ $? != 1 ]; then
+  docker network create onekey_zkenv_default
+else
+  docker network rm onekey_zkenv_default
+  docker network create onekey_zkenv_default
+fi
 
 $OUTPUT "$GREEN init docker config successfully"

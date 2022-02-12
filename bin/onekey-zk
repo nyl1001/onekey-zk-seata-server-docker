@@ -53,6 +53,11 @@ case $command in
     docker ps -a | grep onekey-zk
     exit
   ;;
+  "logs" )
+    $OUTPUT "$RED  Show docker container running logs $TAILS\n"
+    docker logs "${@:2}"
+    exit
+  ;;
   * )
 $OUTPUT "
   $BLUE$FLICKER Building a development environment for the onekey-zk team using docker $TAILS
@@ -67,6 +72,7 @@ $OUTPUT "
     $WHITE onekey-zk login $TAILS           into the container, option: [container name or id]
     $WHITE onekey-zk destroy $TAILS         stop all docker containers and then remove them
     $WHITE onekey-zk rmi $TAILS             exec docker-compose down and then remove all related docker images
+    $WHITE onekey-zk logs $TAILS            Show docker container running logs
     $WHITE onekey-zk help $TAILS            command list
 
     "

@@ -6,6 +6,8 @@ services:
     image: redis:latest
     restart: always
     container_name: redis-onekey-zk-standalone
+    networks:
+      - default
     environment:
       - TZ=Asia/Shanghai
     command:
@@ -24,6 +26,8 @@ services:
     container_name: custom-zookeeper-onekey-zk-standalone
     build: ./zookeeper
     #    image: zookeeper:latest
+    networks:
+      - default
     volumes:
       - ./zookeeper/init.data:/init.data
       - ./zookeeper/data:/data
@@ -44,6 +48,8 @@ services:
     image: 'mysql/mysql-server:5.7'
     restart: always
     container_name: mysql-for-seata-onekey-zk-standalone
+    networks:
+      - default
     environment:
       - TZ=Asia/Shanghai
     volumes:
@@ -59,10 +65,10 @@ services:
     build: ./seata
     image: onekey_custom/seata-server:1.0
     container_name: seata-server-onekey-zk-standalone
+    networks:
+      - default
     hostname: seata-server
     restart: always
-    #    networks:
-    #      - seata-server
     ports:
       - "8091:8091"
     environment:
@@ -98,3 +104,9 @@ services:
       - /etc/localtime:/etc/localtime:ro
     ports:
       - '3309:3306'
+    networks:
+      - default
+networks:
+  default:
+    external:
+      name: onekey_zkenv_default

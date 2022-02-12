@@ -67,6 +67,7 @@ https://docs.docker.com/compose/install/
 
 seata在zookeeper上的注册信息:
 ```
+onekey-zk login custom-zookeeper-onekey-zk-standalone
 cd /apache-zookeeper-3.7.0-bin/bin
 ./zkCli.sh
 ls /registry/zk/default![image](https://user-images.githubusercontent.com/5603342/153039168-767fcdb6-a7ec-44ab-bf22-9c3966619eac.png)
@@ -76,6 +77,7 @@ ls /registry/zk/default![image](https://user-images.githubusercontent.com/560334
 
 seata在zookeeper上的配置信息
 ```
+onekey-zk login custom-zookeeper-onekey-zk-standalone
 cd /apache-zookeeper-3.7.0-bin/bin
 ./zkCli.sh
 ls /seata
@@ -96,6 +98,7 @@ onekey-zk stop        停止运行所有相关容器
 onekey-zk login       进入容器内部，需要指定容器名称
 onekey-zk destroy     停止并删除所有相关容器
 onekey-zk rmi         删除所有相关容器镜像，谨慎操作
+onekey-zk logs        查看容器运行日志，需要指定容器名称
 onekey-zk help        显示所有的命令列表
 
 ```
